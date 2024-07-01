@@ -1,0 +1,7 @@
+---
+- name: oracle database configuration
+  hosts: sai-client2
+  remote_user: ansadmin
+  become: true
+  roles: 
+     - user_setup_reverse

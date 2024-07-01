@@ -1,0 +1,20 @@
+---
+- name: uninstall httpd configuration setup
+  hosts: db_servers 
+  remote_user: ansadmin
+  become: true
+  tasks:
+    -  name : uninstall httpd package
+       yum:
+          name: httpd
+          state: absent
+    -  name : add content to index.html.file
+       copy:
+           content : "ansible configuration has been done"
+           dest : /var/www/html/index.html
+    -  name : start the httpd service
+       service :
+              name : httpd
+              state : disabled
+              enabled : yes
+

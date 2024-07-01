@@ -1,0 +1,12 @@
+---
+- name: Example of variables
+  hosts: localhost
+  gather_facts: no
+  vars:
+    http_port: 443
+    user: saikiran
+    path: /tmp/tomcat
+  tasks:
+   - name: show variables values
+     debug:
+      msg: "port is {{ http_port }}, username is {{ user }}, path is {{ path }}"

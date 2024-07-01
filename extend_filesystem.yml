@@ -1,0 +1,31 @@
+---
+-  name: Extension Filesystem Configuration
+   hosts: sai-ansiblesrv, sai-client1, sai-client2
+   remote_user: ansadmin
+   become: true
+   tasks:
+     -  name: Creating partiion on Specified disk
+        parted:
+          device: /dev/sdc
+          number: 1
+          label: gpt
+          flags: [ lvm ]
+          state: present
+          part_end: 100%
+     -  name: Extending Volume group
+        lvg:
+         vg: datavg
+         pvs: 
+            - /dev/sdb1
+            - /dev/sdc1   
+         state: present
+     -  name: extension the logical volume.
+        lvol:
+           vg: datavg
+           lv: datalv
+           size: +100%FREE
+     -  name: resizing file system
+        filesystem:
+                dev: /dev/datavg/datalv
+                fstype: ext4
+                resizefs: yes

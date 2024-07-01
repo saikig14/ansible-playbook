@@ -1,0 +1,7 @@
+---
+- name: git cloning 
+  hosts: sai-client1
+  remote_user: ansadmin
+  become: true
+  roles: 
+     - ansible-repo1_setup

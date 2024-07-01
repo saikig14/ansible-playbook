@@ -1,0 +1,19 @@
+---
+- name: Example of variables
+  hosts: localhost
+  gather_facts: no
+  vars:
+    http_port: 80
+    user: admin
+    path: /tmp/tomcat
+  tasks:
+   - name: show variables for saikiran
+     vars:
+       admin_user: saikiran
+       http_port: 90
+     debug:
+      msg: "port is {{ http_port }}, username is {{ admin_user }}, path is {{ path }}"
+   - name: show variables for admin
+     debug:
+      msg: "port is {{ http_port }}, username is {{ user }}, path is {{ path }}"
+      

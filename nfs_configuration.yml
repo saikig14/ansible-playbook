@@ -1,0 +1,110 @@
+---
+- name: Creation of filesystem /data
+  hosts: sai-ansiblesrv, sai-client1,sai-client2
+  remote_user: ansadmin
+  become: true
+  vars_files:
+       - vars_nfs.yml
+  tasks:
+     -  name: scanning of disk
+        shell: echo "- - -">/sys/class/scsi_host/host0/scan
+        loop:
+           - 1
+           - 2
+           - 3
+     -  name: Creating partiion on Specifieddisk
+        parted:
+          device: /dev/sdd
+          number: 1
+          label: gpt
+          flags: [ lvm ]
+          state: present
+     -  name: Creating Volume Group
+        lvg:
+          vg: webdatavg
+          pvs: /dev/sdd1
+          state: present
+     -  name: LV creation
+        lvol:
+         vg: webdatavg
+         lv: webdatalv1
+         size: 5120m
+     -  name: Creating Local Mountpoint
+        file:
+         path: /saiwebdata1
+         state: directory
+         mode: '2775'
+     -  name: File system Installing
+        filesystem:
+             dev: /dev/webdatavg/webdatalv1
+             fstype: ext4
+     -  name: Taking backup of fstab file
+        copy:
+          src: /etc/fstab
+          dest: /etc/fstab.bkp
+     -  name: Mounting New Filesystem /webdata1
+        mount:
+          path: /saiwebdata1
+          src: /dev/webdatavg/webdatalv1
+          opts: defaults
+          fstype: ext4
+          state: mounted
+     -  name: LV creation
+        lvol:
+         vg: webdatavg
+         lv: webdatalv2
+         size: 5120m
+     -  name: File system Installing
+        filesystem:
+             dev: /dev/webdatavg/webdatalv2
+             fstype: ext4
+     -  name: Creating Local Mountpoint
+        file:
+         path: /saiwebdata2
+         state: directory
+         mode: '2775'
+     -  name: Mounting New Filesystem /webdata2
+        mount:
+          path: /saiwebdata2
+          src: /dev/webdatavg/webdatalv2
+          opts: defaults
+          fstype: ext4
+          state: mounted
+     -  name: LV creation
+        lvol:
+         vg: webdatavg
+         lv: webdatalv3
+         size: +100%FREE
+     -  name: File system Installing
+        filesystem:
+             dev: /dev/webdatavg/webdatalv3
+             fstype: ext4
+     -  name: Creating Local Mountpoint
+        file:
+         path: /saiwebdata3
+         state: directory
+         mode: '2775'
+     -  name: Mounting New Filesystem /webdata3
+        mount:
+          path: /saiwebdata3
+          src: /dev/webdatavg/webdatalv3
+          opts: defaults
+          fstype: ext4
+          state: mounted
+     -  name: installation of nfs Package
+        yum:
+          name: nfs-utils
+          state: latest
+     -  name: starting nfs service
+        service:
+             name: nfs
+             state: started
+     -  name: Add NFS export entry to /etc/exports
+        lineinfile:
+               path: /etc/exports
+               line: '{{item.line}}'
+               state: present
+        with_items:
+                - '{{export_entry}}'
+     -  name: start of exportfs service
+        shell: exportfs -avr

@@ -1,0 +1,30 @@
+---
+- name: tomcat configuration setup
+  hosts: sai-ansiblesrv
+  remote_user: ansadmin
+  become: true
+  tasks:
+    -  name : installing tomcat package
+       yum:
+          name: tomcat
+          state: latest
+    -  name : starting the tomcat service
+       service :
+              name : tomcat
+              state : started
+              enabled : yes
+       notify: Restart httpd service           
+    -  name : installing httpd packag
+       yum:
+          name: httpd
+          state: latest
+    -  name : starting the httpd service
+       service :
+              name : httpd
+              state : started
+              enabled : yes
+  handlers: 
+    -  name: Restart httpd service
+       service: 
+            name: httpd
+            state: restarted

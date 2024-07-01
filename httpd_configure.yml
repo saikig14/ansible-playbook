@@ -1,0 +1,20 @@
+---
+- name: httpd configuration setup
+  hosts: sai-client1
+  remote_user: ansadmin
+  become: true
+  tasks:
+    -  name : install httpd package
+       yum:
+          name: httpd
+          state: latest
+    -  name : add content to index.html.file
+       copy:
+           content : "ansible configuration has been done"
+           dest : /var/www/html/index.html
+    -  name : start the httpd service
+       service :
+              name : httpd
+              state : started
+              enabled : yes
+

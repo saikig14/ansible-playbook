@@ -1,0 +1,4 @@
+- export_entry:
+                - {line: '/saiwebdata1     *(sync,rw,no_root_squash)'}
+                - {line: '/saiwebdata2     *(sync,rw,no_root_squash)'}
+                - {line: '/saiwebdata3     *(sync,rw,no_root_squash)'}

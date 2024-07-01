@@ -1,0 +1,7 @@
+---
+- name: Boot directory 
+  hosts: sai-client1
+  remote_user: ansadmin
+  become: true
+  roles: 
+     - boot_directory

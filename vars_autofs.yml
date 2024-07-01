@@ -1,0 +1,14 @@
+-  fstab_entry:
+               - {line: 'mani-ansiblesrv:/mani-webdata1-appserv    "/mani-webdata1-appserv"  nfs     defaults        0       0'}
+-  automasters_entry:
+                        - {line: '/-    /etc/auto.direct        --timeout=60'}
+-  automasters2_entry:
+                        - {line: '/mani-data    /etc/auto.indirect        --timeout=60'}
+-  autodirect_entry:
+                        - {line: '/mani-webdata2-appserv     -rw,intr,sync   mani-ansiblesrv:/mani-webdata2-appserv'}
+-  autoindirect_entry:
+                        - {line: 'mani-webdata3-appserv      -rw,intr,sync   mani-ansiblesrv:/mani-webdata3-appserv'}
+-  nfs: "mani-ansiblesrv:/mani-webdata1-appserv"
+-  mountpoint: "/mani-webdata1-appserv"  
+-  permission: "0777"
+-  myopts: "rw,sync"

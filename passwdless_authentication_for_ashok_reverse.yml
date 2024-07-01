@@ -1,0 +1,41 @@
+---
+- name: Removing Password Less Authentication sai-ansiblesrv
+  hosts: sai-ansiblesrv, sai-client1, sai-client2
+  remote_user: ansadmin
+  become: true
+  tasks:
+        -  name: Removing id_rsa.pub from authorized keys
+           lineinfile:
+                      path: /home/ashok/.ssh/authorized_keys
+                      regexp: 'sai-ansiblesrv'
+                      state: absent
+- name: Removing Password Less Authentication 'sai-client1'
+  hosts: db_servers
+  remote_user: ansadmin
+  become: true
+  tasks:
+        -  name: Removing id_rsa.pub from authorized keys
+           lineinfile:
+                      path: /home/ashok/.ssh/authorized_keys
+                      regexp: 'sai-client1'
+                      state: absent
+        -  name: Removing id_rsa.pub from authorized keys
+           lineinfile: 
+                      path: /home/ashok/.ssh/authorized_keys
+                      regexp: 'sai-ansiblesrv'
+                      state: absent
+- name: Removing Password Less Authentication sai-client2
+  hosts: app_servers
+  remote_user: ansadmin
+  become: true
+  tasks:
+        -  name: Removing id_rsa.pub from authorized keys
+           lineinfile:
+                      path: /home/ashok/.ssh/authorized_keys
+                      regexp: 'sai-client2'
+                      state: absent
+        -  name: Removing id_rsa.pub from authorized keys
+           lineinfile: 
+                      path: /home/ashok/.ssh/authorized_keys
+                      regexp: 'sai-ansiblesrv'
+                      state: absent

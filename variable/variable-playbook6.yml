@@ -1,0 +1,11 @@
+---
+- name: Example of variables
+  hosts: localhost
+  gather_facts: no
+  become: true
+  vars_files:
+    - vars.yml
+  tasks:
+   - name: show variables values
+     debug:
+      msg: "port is {{ http_port }}, username is {{ user }}, path is {{ path }}"

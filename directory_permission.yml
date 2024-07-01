@@ -1,0 +1,12 @@
+---
+- name: Changing permissions for ansible-playbook directory
+  hosts: sai-ansiblesrv
+  remote_user: ansadmin
+  become: true
+  tasks:
+     - name: changing a permission for directory
+       file:
+        path: /ansible-playbook
+        mode: "0775"
+        owner: ansadmin
+        group: ansadmin

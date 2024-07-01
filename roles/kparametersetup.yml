@@ -1,0 +1,7 @@
+---
+- name: Set kernel parameter in /etc/sysctl.conf
+  hosts: sai-client2
+  remote_user: ansadmin
+  become: true
+  roles: 
+     - kparameter_setup

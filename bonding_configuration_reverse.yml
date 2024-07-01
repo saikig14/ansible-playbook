@@ -1,0 +1,30 @@
+---
+- name: Removing Bonding Configuration
+  hosts: db_servers, app_servers
+  remote_user: ansadmin
+  become: true
+  tasks: 
+      - name: Removing ens38 entries
+        lineinfile:
+                 path: /etc/sysconfig/network-scripts/ifcfg-ens38
+                 regexp: "MASTER=bond0"
+                 state: absent
+      - name: Removing ens38 entries
+        lineinfile:
+                 path: /etc/sysconfig/network-scripts/ifcfg-ens38
+                 regexp: "SLAVE=yes"
+                 state: absent 
+      - name: Removing ens39 entries
+        lineinfile:
+                 path: /etc/sysconfig/network-scripts/ifcfg-ens39
+                 regexp: "MASTER=bond0"
+                 state: absent   
+      - name: Removing ens39 entries
+        lineinfile:
+                 path: /etc/sysconfig/network-scripts/ifcfg-ens39
+                 regexp: "SLAVE=yes"
+                 state: absent 
+      - name: Removing bond0
+        lineinfile: 
+                 path: /etc/sysconfig/network-scripts/ifcfg-bond0
+                 state: absent 

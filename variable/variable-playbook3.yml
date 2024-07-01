@@ -1,0 +1,16 @@
+---
+- name: Example of variables
+  hosts: localhost
+  gather_facts: no
+  vars:
+    http_port: 
+      - app_port: 443
+      - ora_port: 1046
+    user: 
+      user_1: admin
+      user_2: saikiran
+    path: /tmp/tomcat
+  tasks:
+   - name: show variables for saikiran
+     debug:
+      msg: "port is {{ http_port[1]['ora_port'] }}, username is {{ user.user_2 }}, path is {{ path }}"

@@ -1,0 +1,9 @@
+---
+- name: Example of variables
+  hosts: localhost
+  gather_facts: no
+  
+  tasks:
+   - name: show variables values
+     debug:
+      msg: "port is {{ lookup('env','HTTP_PORT') }}, username is {{ lookup('env','USER_ADMIN') }}, path is {{ lookup('env','APP_PATH') }}"

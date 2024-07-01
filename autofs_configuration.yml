@@ -1,0 +1,84 @@
+---
+-  name: Autofs configuration
+   hosts: sai-ansiblesrv, sai-client1, sai-client2
+   remote_user: ansadmin
+   become: true
+   vars_files:
+     - vars_autofs.yml
+   tasks:
+     -  name: installation of nfs & autofs
+        yum:
+          name: nfs-utils, autofs
+          state: latest 
+     - name: starting nfs service 
+       service:
+         name: nfs
+         state: started
+         enabled: yes    
+     - name: starting autofs service
+       service: 
+        name: autofs
+        state: started
+        enabled: yes     
+     -  name: Creating Local Mountpoint
+        file:
+          path: "{{ mountpoint }}"
+          state: directory
+          mode: "{{ permission }}"
+     -  name: mounting "/mani-webdata1-appserv"
+        mount:
+          src: mani-ansiblesrv:/mani-webdata1-appserv 
+          path: /mani-webdata1-appserv
+          fstype: nfs
+          state: mounted
+     -  name: make entry in automaster file
+        lineinfile:
+          path: /etc/auto.master
+          line:  '{{item.line}}'
+          state: present
+        with_items:
+                 - '{{automasters_entry}}'
+     - name: Create /etc/auto.direct file
+       file:
+        path: /etc/auto.direct
+        state: touch
+     -  name: entry in the autodirect
+        lineinfile:
+          path: /etc/auto.direct
+          line:  '{{item.line}}'
+          state: present
+        with_items:
+                 - '{{autodirect_entry}}'
+     -  name: restart autofs service
+        service:
+          name: autofs
+          state: restarted
+     -  name: adding entry into automaster
+        lineinfile:
+          path: /etc/auto.master
+          line:  '{{item.line}}'
+          state: present 
+        with_items:
+                 - '{{automasters2_entry}}'
+     - name: Create /etc/auto.indirect file
+       file:
+        path: /etc/auto.indirect
+        state: touch
+     -  name: entry in the autoindirect
+        lineinfile:
+          path: /etc/auto.indirect
+          line:  '{{item.line}}'
+          state: present
+        with_items:
+                 - '{{autoindirect_entry}}'
+     -  name: restart autofs service
+        service:
+          name: autofs
+          state: restarted
+     -  name: adding entry into the fstab file
+        lineinfile:
+          path: /etc/fstab
+          line: '{{item.line}}'
+          state: present
+        with_items:
+                  - '{{fstab_entry}}'

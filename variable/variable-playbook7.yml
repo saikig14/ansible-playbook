@@ -1,0 +1,16 @@
+---
+- name: Example of variables
+  hosts: sai-client1
+  gather_facts: no
+  tasks:
+   - name: show variables values
+     debug:
+      msg: "port is {{ http_port }}, username is {{ user }}, path is {{ path }}"
+
+- name: Example of variables
+  hosts: sai-client2
+  gather_facts: no
+  tasks:
+   - name: show variables values
+     debug:
+      msg: "port is {{ http_port }}, username is {{ user }}, path is {{ path }}"

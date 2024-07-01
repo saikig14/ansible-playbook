@@ -1,0 +1,6 @@
+- name: git pushing from local repository to remote repository
+  hosts: sai-ansiblesrv
+  remote_user: ansadmin
+  become: true
+  roles: 
+     - ansible_gitpush_setup
